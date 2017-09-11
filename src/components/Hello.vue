@@ -1,13 +1,14 @@
 <template>
   <div class="hello">
 
-      <span className="score">
-        Score: {{score_board}}
-      </span>
-    <hr>
+    <h1 class="score">
+      Score: <span>{{score_board}}</span>
+    </h1>
+    <h3 v-if="!can_move">GAME OVER</h3>
     <div class="board">
       <span v-for="(val,key) in initial_board " v-if="val" :key="val.id" :class="key+' value'+tile_value(val)">{{tile_value(val)}}</span>
     </div>
+    <button @click="againGame" class="btn">重新开始</button>
   </div>
 </template>
 
@@ -28,19 +29,21 @@
         return key.join("");
       });
     });
-  }
+  };
+  /*棋盘数据*/
+  var initial = {
+    a1:null,a2:null,a3:null,a4:null,
+      b1:null,b2:null,b3:null,b4:null,
+      c1:null,c2:null,c3:null,c4:null,
+      d1:null,d2:null,d3:null,d4:null
+  };
   export default {
     name: 'hello',
     data () {
       return {
         arr:['a1','a2','a3','b1','b2','b3','c1','c2','c4'],
         msg: 'Welcome to 2048',
-        initial_board:{
-          a1:null,a2:null,a3:null,a4:null,
-          b1:null,b2:null,b3:null,b4:null,
-          c1:null,c2:null,c3:null,c4:null,
-          d1:null,d2:null,d3:null,d4:null
-        },
+        initial_board:initial,
         tile_counter : 0,//棋子的数量
         directions : {
           37: left,
@@ -58,6 +61,14 @@
             return a + b;
           })) - that.initial_board[key].values[0];
         }).reduce(function(a,b){return a+b}, 0);
+      },
+      /*判断是否可以移动*/
+      can_move(){
+        var that = this;
+        var new_board = [up,down,left,right].reduce(function(b, direction){
+          return that.fold_board(b, direction);
+        }, this.initial_board);
+        return that.available_spaces(new_board).length > 0
       }
     },
     methods:{
@@ -139,6 +150,7 @@
           values:[initial]
         }
       },
+
       /*设置棋子在哪个位置*/
       set_tile(board, where, tile) {
         var new_board = {};
@@ -182,10 +194,15 @@
         }
         return board;
       },
+      againGame(){
+        console.log(initial)
+        this.initial_board = initial;
+        this.initial_board = this.addTile(this.addTile(this.initial_board))
+      }
     },
     created:function(){
       window.addEventListener("keydown", this.keyHandler, false);
-      this.initial_board = this.addTile(this.addTile(this.addTile(this.initial_board)))
+      this.initial_board = this.addTile(this.addTile(this.initial_board))
     },
   }
 
@@ -193,8 +210,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   *{
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
   }
   .app{
     margin:10px;
@@ -208,6 +225,7 @@
     width:215px;
     height:215px;
     padding:5px;
+    margin: 0 auto;
   }
   .board span{
     font-family: arial;
@@ -243,5 +261,15 @@
   span.value256{ background-color:#afeb6f; }
   span.value512{ background-color:#7aeb6f; }
   span.value1024{ background-color:#e4eb6f; }
+  .btn{
+    margin-top:20px;
+    width:100px;
+    height:30px;
+    outline: none;
+    font-weight:bolder;
+    border: none;
+    background: #cb85ff;
+    color:white;
+  }
 </style>
 
