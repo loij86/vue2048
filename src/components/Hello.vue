@@ -1,5 +1,10 @@
 <template>
   <div class="hello">
+
+      <span className="score">
+        Score: {{score_board}}
+      </span>
+    <hr>
     <div class="board">
       <span v-for="(val,key) in initial_board " v-if="val" :key="val.id" :class="key+' value'+tile_value(val)">{{tile_value(val)}}</span>
     </div>
@@ -7,7 +12,6 @@
 </template>
 
 <script>
-
 
   var left = fold_order(["a","b","c","d"], ["1","2","3","4"], false);
   var right = fold_order(["a","b","c","d"], ["4","3","2","1"], false);
@@ -27,7 +31,6 @@
   }
   export default {
     name: 'hello',
-//  components:{Tiles},
     data () {
       return {
         arr:['a1','a2','a3','b1','b2','b3','c1','c2','c4'],
@@ -48,8 +51,13 @@
       }
     },
     computed:{
-      urlboard(){
-
+      score_board(){
+        var that = this;
+        return that.used_spaces(that.initial_board).map(function(key){
+          return (that.initial_board[key].values.reduce(function(a, b) {
+            return a + b;
+          })) - that.initial_board[key].values[0];
+        }).reduce(function(a,b){return a+b}, 0);
       }
     },
     methods:{
@@ -116,6 +124,12 @@
       available_spaces(board){
         return Object.keys(board).filter(function(key){
           return board[key] === null
+        })
+      },
+      /*获取所有存在的棋子*/
+      used_spaces(board){
+        return Object.keys(board).filter(function(key){
+          return board[key] !== null
         })
       },
       /*新建棋子*/
