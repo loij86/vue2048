@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <div class="board">
-      <span v-for="(val,key) in initial_board " v-if="val" :key="val.id" :class="key+' value'+tile_value(val)">{{tile_value(val)+"-"+val.id}}</span>
+      <span v-for="(val,key) in initial_board " v-if="val" :key="val.id" :class="key+' value'+tile_value(val)">{{tile_value(val)}}</span>
     </div>
   </div>
 </template>
@@ -151,7 +151,9 @@
       keyHandler(e){
         if(this.directions[e.keyCode]
           && this.setBoard(this.fold_board(this.initial_board, this.directions[e.keyCode]))){
-
+          setTimeout(function(){
+                        this.setBoard(this.addTile(this.initial_board));
+                    }.bind(this), 100);
         }
       },
       /*添加棋子*/
@@ -207,7 +209,7 @@
     padding-top:14px;
     background-color:#ebe76f;
     border-radius: 5px;
-    transition: all 1000ms linear;
+    transition: all 100ms linear;
   }
   .a1, .b1, .c1, .d1{ left:5px; }
   .a2, .b2, .c2, .d2{ left:60px; }
