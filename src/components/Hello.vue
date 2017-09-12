@@ -1,10 +1,11 @@
 <template>
   <div class="hello">
-    <modal v-if= "!can_move" :game-score="score_board" :isShow="modalShow" @restartgame="againGame"></modal>
+    <transition name="modalshow">
+      <modal v-if= "!can_move" :game-score="score_board" :isShow="modalShow" @restartgame="againGame"></modal>
+    </transition>
     <h1 class="score" >
       Score: <span>{{score_board}}</span>
     </h1>
-    <h3 v-if="!can_move">GAME OVER</h3>
     <div class="board">
       <span v-for="(val,key) in initial_board " v-if="val" :key="val.id" :class="key+' value'+tile_value(val)">{{tile_value(val)}}</span>
     </div>
@@ -286,6 +287,16 @@
   .score{
     margin-bottom:30px;
     color:orange;
+  }
+  .modalshow-leave-active{
+    transition: all 11.4s linear;
+  }
+  .modalshow-enter-active{
+    transition: all 11.4s linear;
+  }
+  .modalshow-enter,.modalshow-leave-active{
+    width: 0;
+    height: 0;
   }
 </style>
 

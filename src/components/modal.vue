@@ -1,7 +1,8 @@
 <template>
-  <div class="modal" rel="modal" v-show="isShow">
+  <div class="modal" rel="modal" v-show="isShowSelf">
+
     <div  class="modal-content" >
-      <h2 class="c-red">历史最高分数:2000</h2>
+      <h3 class="c-red">历史最高分数:{{maxScore}}</h3>
       <h1 class="c-orange">
         获得分数: {{gameScore}}
       </h1>
@@ -9,7 +10,10 @@
         <button class="btn c-red2" @click="restart">重新开始</button>
         <button class="btn c-red1" @click="edit">退出游戏</button>
       </div>
-      <p class="share">分享到: <span>QQ</span> <span>微信</span> <span>微博</span></p>
+      <div class="share">
+        <p>分享到:</p>
+        <span>QQ</span> <span>微信</span> <span>微博</span>
+      </div>
     </div>
   </div>
 </template>
@@ -17,15 +21,15 @@
   export default {
     props:['gameScore','isShow'],
     data(){
-      return {}
+      return {isShowSelf:this.isShow}
     },
-//    computed:{
-//      isshow(){return this.isGameOver}
-//    },
+    computed:{
+      maxScore(){return localStorage.maxScore}
+    },
     methods:{
       /*结束游戏*/
       edit(){
-
+        this.isShowSelf = false;
       },
       /*重新开始*/
       restart(){
@@ -61,6 +65,9 @@
 
   .share{
     font-size:16px;
+  }
+  .share p{
+    margin-bottom:4px;
   }
   .share span{
     display: inline-block;
