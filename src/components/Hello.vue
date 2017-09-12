@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
-
-    <h1 class="score">
+    <modal v-if= "!can_move" :game-score="score_board" :isShow="modalShow" @restartgame="againGame"></modal>
+    <h1 class="score" >
       Score: <span>{{score_board}}</span>
     </h1>
     <h3 v-if="!can_move">GAME OVER</h3>
@@ -13,6 +13,9 @@
 </template>
 
 <script>
+  /*获取弹出层*/
+  import Modal from './modal.vue'
+
 
   var left = fold_order(["a","b","c","d"], ["1","2","3","4"], false);
   var right = fold_order(["a","b","c","d"], ["4","3","2","1"], false);
@@ -51,6 +54,7 @@
           39: right,
           40: down
         },
+        modalShow :true
       }
     },
     computed:{
@@ -199,15 +203,18 @@
         return board;
       },
       againGame(){
-        console.log(initial)
         this.initial_board = initial;
         this.initial_board = this.addTile(this.addTile(this.initial_board))
-      }
+        this.modalShow = true;
+      },
     },
     created:function(){
       window.addEventListener("keydown", this.keyHandler, false);
       this.initial_board = this.addTile(this.addTile(this.initial_board))
     },
+    components:{
+      Modal
+    }
   }
 
 </script>
@@ -224,7 +231,6 @@
   .board{
     display:block;
     position:relative;
-    margin:10px 0px 10px 0px;
     border:1px solid #ccc;
     width:215px;
     height:215px;
@@ -267,13 +273,19 @@
   span.value1024{ background-color:#e4eb6f; }
   .btn{
     margin-top:20px;
-    width:100px;
-    height:30px;
+    width:200px;
+    height:40px;
     outline: none;
-    font-weight:bolder;
-    border: none;
-    background: #cb85ff;
-    color:white;
+    color: #ff5d75;
+    border:1px solid #ccc;
+    border-radius:4px;
+    font-size:18px;
+    font-weight:900;
+    background-color: #fff;
+  }
+  .score{
+    margin-bottom:30px;
+    color:orange;
   }
 </style>
 
