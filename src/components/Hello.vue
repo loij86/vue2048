@@ -184,9 +184,13 @@
       },
       /*添加棋子*/
       addTile:function(board){
-        var location = this.available_spaces(board).sort(function() {
-          return .5 - Math.random();
-        }).pop();
+//        var location = this.available_spaces(board).sort(function() {
+//          return .5 - Math.random();
+//        }).pop();
+        var availables = this.available_spaces(board),
+            len = availables.length,
+            radom = Math.floor(Math.random()*len),
+            location = availables[radom];
 
         if(location){
           var two_or_four = Math.floor(Math.random() * 2, 0) ? 2 : 4;
