@@ -55,7 +55,10 @@
           39: right,
           40: down
         },
-        modalShow :true
+        modalShow :true,
+//        touchStartX:'',
+//        touchStartY:'',
+//        distantX:'',
       }
     },
     computed:{
@@ -111,7 +114,6 @@
               else{
                 new_tiles.push(tile);
               }
-              console.log(tile.id)
             }
           }
         }
@@ -179,9 +181,11 @@
         return false;
       },
 //----------组件内部函数------------
-      keyHandler(e){
-        if(this.directions[e.keyCode]
-          && this.setBoard(this.fold_board(this.initial_board, this.directions[e.keyCode]))){
+      keyHandler(e,kd){
+
+        var keyCode = kd || e.keyCode;
+        if(this.directions[keyCode]
+          && this.setBoard(this.fold_board(this.initial_board, this.directions[keyCode]))){
           setTimeout(function(){
                         this.setBoard(this.addTile(this.initial_board));
                     }.bind(this), 100);
@@ -210,8 +214,48 @@
       },
     },
     created:function(){
+      var self = this;
+
       window.addEventListener("keydown", this.keyHandler, false);
       this.initial_board = this.addTile(this.addTile(this.initial_board))
+      /*触发手势事件-----------------------*/
+      var touchStartX,touchStartY,distantX,distantY;
+      // var box = document.getElementsByClassName('box')[0];
+      window.addEventListener("touchstart", function(event) {
+        touchStartX = event.targetTouches[0].clientX;
+        touchStartY = event.targetTouches[0].clientY;
+      })
+      window.addEventListener("touchmove", function(event) {
+        distantX = event.targetTouches[0].clientX - touchStartX;
+        distantY = event.targetTouches[0].clientY - touchStartY;
+      })
+      window.addEventListener("touchend", function() {
+        if(distantX > 0 ){
+        }else if(Math.abs(distantX) > Math.abs(distantY)){
+//          alert("right");
+          self.keyHandler(null,37)
+        }else if(distantY > 0){
+//          alert("top");
+          self.keyHandler(null,40)
+        }else if(distantY < 0){
+//          alert("bottom");
+          self.keyHandler(null,38)
+        }
+
+
+        if(distantX < 0 ){
+        }else if(Math.abs(distantX) > Math.abs(distantY)){
+//          alert("left");
+          self.keyHandler(null,39)
+        }else if(distantY > 0){
+//          alert("top");
+          self.keyHandler(null,40)
+        }else if(distantY < 0){
+//          alert("bottom");
+          self.keyHandler(null,38)
+        }
+
+      })
     },
     components:{
       Modal
