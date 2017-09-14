@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" rel="modal" v-show="isShowSelf">
+  <div class="modal" rel="modal">
 
     <div  class="modal-content" >
       <h3 class="c-red">历史最高分数:{{maxScore}}</h3>
@@ -19,20 +19,24 @@
 </template>
 <script>
   export default {
-    props:['gameScore','isShow'],
+    props:['gameScore'],
     data(){
-      return {isShowSelf:this.isShow}
+//      var that = this
+      return {
+        isShowSelf:true
+      }
     },
     computed:{
       maxScore(){return localStorage.maxScore}
     },
     methods:{
-      /*结束游戏*/
+    /*结束游戏*/
       edit(){
-        this.isShowSelf = false;
+        this.$emit('restartgame');
       },
       /*重新开始*/
       restart(){
+//        this.isShowSelf = false;
         this.$emit('restartgame');
       }
     }

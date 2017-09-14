@@ -1,8 +1,11 @@
 <template>
   <div class="hello">
-    <transition name="modalshow">
-      <modal v-if= "!can_move" :game-score="score_board" :isShow="modalShow" @restartgame="againGame"></modal>
-    </transition>
+    <!--<transition name="modalshow">-->
+      <modal v-show= "!can_move"
+             :game-score="score_board"
+             @restartgame="againGame"
+      ></modal>
+    <!--</transition>-->
     <h1 class="score" >
       Score: <span>{{score_board}}</span>
     </h1>
@@ -55,7 +58,7 @@
           39: right,
           40: down
         },
-        modalShow :true,
+        modalShow :false,
 //        touchStartX:'',
 //        touchStartY:'',
 //        distantX:'',
@@ -76,6 +79,12 @@
         var new_board = [up,down,left,right].reduce(function(b, direction){
           return that.fold_board(b, direction);
         }, this.initial_board);
+          /*游戏结束保存记录*/
+          if(localStorage.maxScore){
+            localStorage.maxScore = that.score_board>localStorage.maxScore?that.score_board:localStorage.maxScore
+          }else{
+            localStorage.maxScore = that.score_board
+          }
         return that.available_spaces(new_board).length > 0
       }
     },
@@ -210,7 +219,8 @@
       againGame(){
         this.initial_board = initial;
         this.initial_board = this.addTile(this.addTile(this.initial_board))
-        this.modalShow = true;
+        this.modalShow = false;
+
       },
     },
     created:function(){
@@ -329,18 +339,19 @@
     background-color: #fff;
   }
   .score{
+    margin-top:0;
     margin-bottom:30px;
     color:orange;
   }
-  .modalshow-leave-active{
-    transition: all 11.4s linear;
-  }
-  .modalshow-enter-active{
-    transition: all 11.4s linear;
-  }
-  .modalshow-enter,.modalshow-leave-active{
-    width: 0;
-    height: 0;
-  }
+  /*.modalshow-leave-active{*/
+    /*transition: all 11.4s linear;*/
+  /*}*/
+  /*.modalshow-enter-active{*/
+    /*transition: all 11.4s linear;*/
+  /*}*/
+  /*.modalshow-enter,.modalshow-leave-active{*/
+    /*width: 0;*/
+    /*height: 0;*/
+  /*}*/
 </style>
 
