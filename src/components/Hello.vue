@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <!--<transition name="modalshow">-->
-      <modal v-show= "!can_move"
+      <modal v-if= "!can_move"
              :game-score="score_board"
              @restartgame="againGame"
       ></modal>
@@ -81,11 +81,12 @@
         }, this.initial_board);
           /*游戏结束保存记录*/
           if(localStorage.maxScore){
-            localStorage.maxScore = that.score_board>localStorage.maxScore?that.score_board:localStorage.maxScore
+            localStorage.maxScore = this.score_board>localStorage.maxScore?this.score_board:localStorage.maxScore
           }else{
-            localStorage.maxScore = that.score_board
+            localStorage.maxScore = this.score_board
           }
-        return that.available_spaces(new_board).length > 0
+        console.log(localStorage.maxScore)
+        return this.available_spaces(new_board).length > 0
       }
     },
     methods:{

@@ -24,6 +24,7 @@
 //      var that = this
       return {
         isShowSelf:true
+
       }
     },
     computed:{
