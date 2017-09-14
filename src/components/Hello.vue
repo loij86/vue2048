@@ -328,7 +328,7 @@
   span.value512{ background-color:#7aeb6f; }
   span.value1024{ background-color:#e4eb6f; }
   .btn{
-    margin-top:20px;
+    margin-top:10px;
     width:200px;
     height:40px;
     outline: none;
@@ -341,7 +341,7 @@
   }
   .score{
     margin-top:0;
-    margin-bottom:30px;
+    margin-bottom:20px;
     color:orange;
   }
   /*.modalshow-leave-active{*/
